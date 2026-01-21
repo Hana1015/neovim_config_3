@@ -30,22 +30,18 @@ return {
       opts.completion = opts.completion or {}
       opts.completion.autocomplete = { cmp.TriggerEvent.TextChanged }
 
-      opts.mapping = opts.mapping or {}
-      opts.mapping["<C-Space>"] = cmp.mapping.complete()
-      opts.mapping["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select })
-      opts.mapping["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-      opts.mapping["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select })
-      opts.mapping["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-      opts.mapping["<CR>"] = cmp.mapping.confirm({ select = true })
-      opts.mapping["<C-y>"] = cmp.mapping.confirm({ select = true })
-
-      opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.confirm({ select = true })
-        else
-          fallback()
-        end
-      end, { "i", "s" })
+      opts.mapping = cmp.mapping.preset.insert({
+        ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+        ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+        ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        ["<Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.confirm({ select = true })
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+      })
 
       cmp.setup.filetype({ "python" }, {
         sources = cmp.config.sources({
