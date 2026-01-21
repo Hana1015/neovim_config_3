@@ -22,6 +22,36 @@ return {
           fallback()
         end
       end, { "i", "s" })
+
+      cmp.setup.filetype({ "python" }, {
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "copilot", group_index = 2 },
+          { name = "path" },
+        }, {
+          { name = "buffer" },
+        }),
+      })
+
+      cmp.setup.filetype({ "r", "rmd" }, {
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "copilot", group_index = 2 },
+          { name = "path" },
+        }, {
+          { name = "buffer" },
+        }),
+      })
+
+      cmp.setup.filetype({ "sh", "bash", "zsh" }, {
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "copilot", group_index = 2 },
+          { name = "path" },
+        }, {
+          { name = "buffer" },
+        }),
+      })
     end,
   },
   {
