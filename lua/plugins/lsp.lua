@@ -4,22 +4,22 @@ return {
     dependencies = {
       "mason-org/mason.nvim",
       "mason-org/mason-lspconfig.nvim",
+      "hrsh7th/cmp-nvim-lsp",
     },
-    opts = {
-      servers = {
-        lua_ls = {
-          settings = {
-            Lua = {
-              workspace = { checkThirdParty = false },
-              telemetry = { enable = false },
-            },
-          },
-        },
-        pyright = {},
-        r_language_server = {},
-        bashls = {},
-      },
-    },
+    opts = function(_, opts)
+      opts.capabilities = require("cmp_nvim_lsp").default_capabilities(opts.capabilities)
+
+      opts.servers = opts.servers or {}
+      opts.servers.lua_ls = opts.servers.lua_ls or {}
+      opts.servers.lua_ls.settings = opts.servers.lua_ls.settings or {}
+      opts.servers.lua_ls.settings.Lua = opts.servers.lua_ls.settings.Lua or {}
+      opts.servers.lua_ls.settings.Lua.workspace = opts.servers.lua_ls.settings.Lua.workspace or { checkThirdParty = false }
+      opts.servers.lua_ls.settings.Lua.telemetry = opts.servers.lua_ls.settings.Lua.telemetry or { enable = false }
+
+      opts.servers.pyright = opts.servers.pyright or {}
+      opts.servers.r_language_server = opts.servers.r_language_server or {}
+      opts.servers.bashls = opts.servers.bashls or {}
+    end,
   },
   {
     "mason-org/mason.nvim",
