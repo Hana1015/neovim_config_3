@@ -22,7 +22,12 @@ return {
       end
       table.insert(opts.sources, { name = "copilot", group_index = 2 })
 
+      opts.completion = opts.completion or {}
+      opts.completion.autocomplete = { cmp.TriggerEvent.TextChanged }
+
       opts.mapping = opts.mapping or {}
+      opts.mapping["<C-Space>"] = cmp.mapping.complete()
+
       opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.confirm({ select = true })
