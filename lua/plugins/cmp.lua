@@ -12,6 +12,14 @@ return {
       local cmp = require("cmp")
 
       opts.sources = opts.sources or {}
+      if #opts.sources == 0 then
+        opts.sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "path" },
+        }, {
+          { name = "buffer" },
+        })
+      end
       table.insert(opts.sources, { name = "copilot", group_index = 2 })
 
       opts.mapping = opts.mapping or {}
