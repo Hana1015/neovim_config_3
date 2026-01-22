@@ -7,6 +7,9 @@ return {
   },
   opts = {
     hijack_netrw = true,
+    filesystem_watchers = {
+      enable = true,
+    },
     view = {
       width = 32,
       side = "left",
