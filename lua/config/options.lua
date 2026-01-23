@@ -3,3 +3,5 @@
 -- Add any additional options here
 
 vim.opt.guicursor = "a:ver25"
+vim.opt.virtualedit = "onemore"
+vim.opt.backspace = "indent,eol,start"

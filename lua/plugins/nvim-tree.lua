@@ -25,7 +25,11 @@ return {
         return
       end
 
+      vim.fn.setreg('"', path)
       vim.fn.setreg("+", path)
+      vim.api.nvim_exec_autocmds("TextYankPost", {
+        data = { operator = "y", regname = "+", regtype = "v" },
+      })
       vim.notify("コピーしました: " .. path)
     end, {})
 
@@ -75,7 +79,11 @@ return {
           return
         end
 
+        vim.fn.setreg('"', path)
         vim.fn.setreg("+", path)
+        vim.api.nvim_exec_autocmds("TextYankPost", {
+          data = { operator = "y", regname = "+", regtype = "v" },
+        })
         vim.notify("コピーしました: " .. path)
       end
 
