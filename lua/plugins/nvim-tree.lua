@@ -5,6 +5,61 @@ return {
   keys = {
     { "<leader>e", "<cmd>NvimTreeToggle<cr>", desc = "NvimTree" },
   },
+  config = function(_, opts)
+    require("nvim-tree").setup(opts)
+
+    vim.api.nvim_create_user_command("NvimTreeCopyPath", function()
+      if vim.bo.filetype ~= "NvimTree" then
+        vim.notify("NvimTree内で実行してください")
+        return
+      end
+
+      local api = require("nvim-tree.api")
+      local node = api.tree.get_node_under_cursor()
+      if not node then
+        return
+      end
+
+      local path = node.link_to or node.absolute_path
+      if not path or path == "" then
+        return
+      end
+
+      vim.fn.setreg("+", path)
+      vim.notify("コピーしました: " .. path)
+    end, {})
+
+    vim.api.nvim_create_user_command("NvimTreeCreateSubdir", function()
+      if vim.bo.filetype ~= "NvimTree" then
+        vim.notify("NvimTree内で実行してください")
+        return
+      end
+
+      local api = require("nvim-tree.api")
+      local node = api.tree.get_node_under_cursor()
+      if not node or not node.absolute_path then
+        return
+      end
+
+      local base = node.absolute_path
+      if node.type ~= "directory" then
+        base = vim.fn.fnamemodify(base, ":h")
+      end
+
+      vim.ui.input({ prompt = "Subdir name: " }, function(name)
+        if not name or name == "" then
+          return
+        end
+
+        name = name:gsub("^/", "")
+        local path = base .. "/" .. name
+
+        vim.fn.mkdir(path, "p")
+        api.tree.reload()
+        vim.notify("作成しました: " .. path)
+      end)
+    end, {})
+  end,
   opts = {
     on_attach = function(bufnr)
       local api = require("nvim-tree.api")
