@@ -1,10 +1,7 @@
 -- bootstrap lazy.nvim, LazyVim and your plugins
 require("config.lazy")
-<<<<<<< HEAD
 vim.opt.clipboard = "unnamed,unnamedplus"
-=======
 vim.opt.clipboard = "unnamedplus"
->>>>>>> 087baf8125af4f77ff4f7759343055e65147b79d
 
 if vim.env.TMUX then
   vim.api.nvim_create_autocmd("TextYankPost", {
@@ -23,8 +20,6 @@ if vim.env.TMUX then
     vim.fn.system(string.format('printf "\\033]52;c;%s\\007" | base64 -d', vim.fn.base64(content)))
   end, { silent = true })
 end
-<<<<<<< HEAD
-=======
 
 -- Normal モード：現在行のインデントを減らす
 vim.keymap.set('n', '<S-Tab>', '<<', { noremap = true, silent = true })
@@ -32,4 +27,3 @@ vim.keymap.set('n', '<S-Tab>', '<<', { noremap = true, silent = true })
 vim.keymap.set('v', '<S-Tab>', '<gv', { noremap = true, silent = true })
 -- Insert モード：現在行のインデントを減らす
 vim.keymap.set('i', '<S-Tab>', '<C-d>', { noremap = true, silent = true })
->>>>>>> 087baf8125af4f77ff4f7759343055e65147b79d
