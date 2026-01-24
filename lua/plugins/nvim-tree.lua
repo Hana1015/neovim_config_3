@@ -44,26 +44,6 @@ local function natural_less(a, b)
   return la < lb
 end
 
-local function copy_path_to_clipboard(path)
-  if not path or path == "" then
-    return false
-  end
-
-  vim.fn.setreg('"', path, "v")
-  vim.fn.setreg("+", path, "v")
-  vim.fn.setreg("*", path, "v")
-
-  if vim.fn.executable("pbcopy") == 1 then
-    vim.fn.system("pbcopy", path)
-  end
-
-  vim.api.nvim_exec_autocmds("TextYankPost", {
-    data = { operator = "y", regname = "+", regtype = "v" },
-  })
-
-  return true
-end
-
 local function is_directory_like(node)
   if node.type == "directory" then
     return true
@@ -101,9 +81,16 @@ return {
       end
 
       local path = node.link_to or node.absolute_path
-      if copy_path_to_clipboard(path) then
-        vim.notify("コピーしました: " .. path)
+      if not path or path == "" then
+        return
       end
+
+      vim.fn.setreg('"', path)
+      vim.fn.setreg("+", path)
+      vim.api.nvim_exec_autocmds("TextYankPost", {
+        data = { operator = "y", regname = "+", regtype = "v" },
+      })
+      vim.notify("コピーしました: " .. path)
     end, {})
 
     vim.api.nvim_create_user_command("NvimTreeCreateSubdir", function()
@@ -162,9 +149,16 @@ return {
         end
 
         local path = node.link_to or node.absolute_path
-        if copy_path_to_clipboard(path) then
-          vim.notify("コピーしました: " .. path)
+        if not path or path == "" then
+          return
         end
+
+        vim.fn.setreg('"', path)
+        vim.fn.setreg("+", path)
+        vim.api.nvim_exec_autocmds("TextYankPost", {
+          data = { operator = "y", regname = "+", regtype = "v" },
+        })
+        vim.notify("コピーしました: " .. path)
       end
 
       local function create_subdir()
