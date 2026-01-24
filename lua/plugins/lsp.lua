@@ -7,9 +7,9 @@ return {
       "hrsh7th/cmp-nvim-lsp",
     },
     opts = function(_, opts)
-      opts.capabilities = require("cmp_nvim_lsp").default_capabilities(opts.capabilities)
-
       opts.servers = opts.servers or {}
+      opts.servers["*"] = opts.servers["*"] or {}
+      opts.servers["*"].capabilities = require("cmp_nvim_lsp").default_capabilities(opts.servers["*"].capabilities)
       opts.servers.lua_ls = opts.servers.lua_ls or {}
       opts.servers.lua_ls.settings = opts.servers.lua_ls.settings or {}
       opts.servers.lua_ls.settings.Lua = opts.servers.lua_ls.settings.Lua or {}
