@@ -23,7 +23,11 @@ end
 
 -- Normal モード：現在行のインデントを減らす
 vim.keymap.set('n', '<S-Tab>', '<<', { noremap = true, silent = true })
+-- Normal モード：現在行のインデントを増やす
+vim.keymap.set('n', '<Tab>', '>>', { noremap = true, silent = true })
 -- Visual モード：選択範囲のインデントを減らす
 vim.keymap.set('v', '<S-Tab>', '<gv', { noremap = true, silent = true })
+-- Visual モード：選択範囲のインデントを増やす
+vim.keymap.set('v', '<Tab>', '>gv', { noremap = true, silent = true })
 -- Insert モード：現在行のインデントを減らす
 vim.keymap.set('i', '<S-Tab>', '<C-d>', { noremap = true, silent = true })
