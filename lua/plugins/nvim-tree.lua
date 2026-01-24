@@ -1,3 +1,49 @@
+local function natural_less(a, b)
+  local ia, ib = 1, 1
+  local la, lb = #a, #b
+
+  while ia <= la and ib <= lb do
+    local ca = a:sub(ia, ia)
+    local cb = b:sub(ib, ib)
+
+    if ca:match("%d") and cb:match("%d") then
+      local sa, ea = a:find("^%d+", ia)
+      local sb, eb = b:find("^%d+", ib)
+      local na = tonumber(a:sub(sa, ea))
+      local nb = tonumber(b:sub(sb, eb))
+
+      if na ~= nb then
+        return na < nb
+      end
+
+      local lena = ea - sa
+      local lenb = eb - sb
+      if lena ~= lenb then
+        return lena < lenb
+      end
+
+      ia = ea + 1
+      ib = eb + 1
+    else
+      local la_char = ca:lower()
+      local lb_char = cb:lower()
+
+      if la_char ~= lb_char then
+        return la_char < lb_char
+      end
+
+      if ca ~= cb then
+        return ca < cb
+      end
+
+      ia = ia + 1
+      ib = ib + 1
+    end
+  end
+
+  return la < lb
+end
+
 return {
   "nvim-tree/nvim-tree.lua",
   dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -65,6 +111,17 @@ return {
     end, {})
   end,
   opts = {
+    sort = {
+      sorter = function(nodes)
+        table.sort(nodes, function(a, b)
+          if a.type ~= b.type then
+            return a.type == "directory"
+          end
+
+          return natural_less(a.name, b.name)
+        end)
+      end,
+    },
     on_attach = function(bufnr)
       local api = require("nvim-tree.api")
 
