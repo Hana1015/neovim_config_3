@@ -44,6 +44,40 @@ local function natural_less(a, b)
   return la < lb
 end
 
+local function copy_path_to_clipboard(path)
+  if not path or path == "" then
+    return false
+  end
+
+  vim.fn.setreg('"', path, "v")
+  vim.fn.setreg("+", path, "v")
+  vim.fn.setreg("*", path, "v")
+
+  if vim.fn.executable("pbcopy") == 1 then
+    vim.fn.system("pbcopy", path)
+  end
+
+  vim.api.nvim_exec_autocmds("TextYankPost", {
+    data = { operator = "y", regname = "+", regtype = "v" },
+  })
+
+  return true
+end
+
+local function is_directory_like(node)
+  if node.type == "directory" then
+    return true
+  end
+
+  if not node.link_to or node.link_to == "" then
+    return false
+  end
+
+  local uv = vim.uv or vim.loop
+  local stat = uv.fs_stat(node.link_to)
+  return stat and stat.type == "directory" or false
+end
+
 return {
   "nvim-tree/nvim-tree.lua",
   dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -67,16 +101,9 @@ return {
       end
 
       local path = node.link_to or node.absolute_path
-      if not path or path == "" then
-        return
+      if copy_path_to_clipboard(path) then
+        vim.notify("コピーしました: " .. path)
       end
-
-      vim.fn.setreg('"', path)
-      vim.fn.setreg("+", path)
-      vim.api.nvim_exec_autocmds("TextYankPost", {
-        data = { operator = "y", regname = "+", regtype = "v" },
-      })
-      vim.notify("コピーしました: " .. path)
     end, {})
 
     vim.api.nvim_create_user_command("NvimTreeCreateSubdir", function()
@@ -114,8 +141,11 @@ return {
     sort = {
       sorter = function(nodes)
         table.sort(nodes, function(a, b)
-          if a.type ~= b.type then
-            return a.type == "directory"
+          local a_is_dir = is_directory_like(a)
+          local b_is_dir = is_directory_like(b)
+
+          if a_is_dir ~= b_is_dir then
+            return a_is_dir
           end
 
           return natural_less(a.name, b.name)
@@ -132,16 +162,9 @@ return {
         end
 
         local path = node.link_to or node.absolute_path
-        if not path or path == "" then
-          return
+        if copy_path_to_clipboard(path) then
+          vim.notify("コピーしました: " .. path)
         end
-
-        vim.fn.setreg('"', path)
-        vim.fn.setreg("+", path)
-        vim.api.nvim_exec_autocmds("TextYankPost", {
-          data = { operator = "y", regname = "+", regtype = "v" },
-        })
-        vim.notify("コピーしました: " .. path)
       end
 
       local function create_subdir()
