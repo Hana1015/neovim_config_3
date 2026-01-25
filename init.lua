@@ -3,10 +3,39 @@ require("config.lazy")
 vim.opt.clipboard = "unnamed,unnamedplus"
 vim.opt.clipboard = "unnamedplus"
 
+vim.api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    if vim.v.event.operator ~= "y" then
+      return
+    end
+
+    local reg = vim.v.event.regname
+    if reg == "" then
+      reg = '"'
+    end
+
+    local text = vim.fn.getreg(reg)
+    if text == nil or text == "" then
+      return
+    end
+
+    local regtype = vim.fn.getregtype(reg)
+    vim.fn.setreg('"', text, regtype)
+    vim.fn.setreg("0", text, regtype)
+  end,
+})
+
 if vim.env.TMUX then
   vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
-      local content = vim.fn.getreg('"')
+      local reg = vim.v.event.regname
+      if reg == "" then
+        reg = '"'
+      end
+      local content = vim.fn.getreg(reg)
+      if content == nil or content == "" then
+        return
+      end
       local success = vim.fn.system(string.format("tmux set-buffer '%s'", content))
       if vim.v.shell_error ~= 0 then
         print("Failed to sync to tmux buffer")
