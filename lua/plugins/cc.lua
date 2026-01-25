@@ -43,6 +43,12 @@ return {
  selection = require('CopilotChat.select').gitdiff,
  },
  },
+ mappings = {
+ accept_diff = {
+ normal = '<leader>ca',
+ insert = '<leader>ca',
+ },
+ },
  })
  end,  -- See Commands section for default commands if you want to lazy load on them
  keys = {
