@@ -12,6 +12,7 @@ return {
  -- See Commands section for default commands if you want to lazy load on them
  config = function()
  require('CopilotChat').setup({
+ model = 'GPT-5.2-codex',
  prompts = {
  Explain = {
  prompt = '選択したコードの説明を日本語で書いてください',
