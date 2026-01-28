@@ -191,7 +191,7 @@ return {
     end,
     hijack_netrw = true,
     filesystem_watchers = {
-      enable = true,
+      enable = false,
     },
     view = {
       width = {
