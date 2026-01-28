@@ -19,13 +19,15 @@ return {
       opts.sources = opts.sources or {}
       if #opts.sources == 0 then
         opts.sources = cmp.config.sources({
+          { name = "copilot", group_index = 1 },
           { name = "nvim_lsp" },
           { name = "path" },
         }, {
           { name = "buffer" },
         })
+      else
+        table.insert(opts.sources, 1, { name = "copilot", group_index = 1 })
       end
-      table.insert(opts.sources, { name = "copilot", group_index = 2 })
 
       opts.completion = opts.completion or {}
       opts.completion.autocomplete = { cmp.TriggerEvent.TextChanged }
@@ -38,8 +40,8 @@ return {
 
       cmp.setup.filetype({ "python" }, {
         sources = cmp.config.sources({
+          { name = "copilot", group_index = 1 },
           { name = "nvim_lsp" },
-          { name = "copilot", group_index = 2 },
           { name = "path" },
         }, {
           { name = "buffer" },
@@ -48,8 +50,8 @@ return {
 
       cmp.setup.filetype({ "r", "rmd" }, {
         sources = cmp.config.sources({
+          { name = "copilot", group_index = 1 },
           { name = "nvim_lsp" },
-          { name = "copilot", group_index = 2 },
           { name = "path" },
         }, {
           { name = "buffer" },
@@ -58,8 +60,8 @@ return {
 
       cmp.setup.filetype({ "sh", "bash", "zsh" }, {
         sources = cmp.config.sources({
+          { name = "copilot", group_index = 1 },
           { name = "nvim_lsp" },
-          { name = "copilot", group_index = 2 },
           { name = "path" },
         }, {
           { name = "buffer" },

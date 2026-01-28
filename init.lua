@@ -1,5 +1,8 @@
 -- bootstrap lazy.nvim, LazyVim and your plugins
 require("config.lazy")
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.hlsearch = true
 vim.opt.clipboard = "unnamed,unnamedplus"
 vim.opt.clipboard = "unnamedplus"
 
