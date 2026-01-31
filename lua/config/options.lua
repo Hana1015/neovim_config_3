@@ -5,5 +5,6 @@
 vim.opt.guicursor = "a:ver25"
 vim.opt.virtualedit = "onemore"
 vim.opt.backspace = "indent,eol,start"
+vim.opt.mouse = "a"
 -- # で始まる行で改行しても自動で # を継続しない
 vim.opt.formatoptions:remove({ "r", "o" })
