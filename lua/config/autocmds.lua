@@ -9,6 +9,17 @@
 
 local nvim_tree_reload_group = vim.api.nvim_create_augroup("UserNvimTreeReload", { clear = true })
 
+local function get_nvim_tree_win()
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		local buf = vim.api.nvim_win_get_buf(win)
+		if vim.bo[buf].filetype == "NvimTree" then
+			return win
+		end
+	end
+
+	return nil
+end
+
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "DirChanged" }, {
 	group = nvim_tree_reload_group,
 	callback = function()
@@ -18,54 +29,16 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "DirChanged" }, {
 		end
 
 		if api.tree.is_visible() then
+			local tree_win = get_nvim_tree_win()
+			local tree_width = tree_win and vim.api.nvim_win_get_width(tree_win) or nil
 			api.tree.reload()
+			if tree_win and tree_width then
+				vim.defer_fn(function()
+					if vim.api.nvim_win_is_valid(tree_win) then
+						vim.api.nvim_win_set_width(tree_win, tree_width)
+					end
+				end, 10)
+			end
 		end
-	end,
-})
-
-local image_window_width_group = vim.api.nvim_create_augroup("UserImageWindowWidth", { clear = true })
-local image_filetypes = {
-	"png",
-	"jpg",
-	"jpeg",
-	"gif",
-	"bmp",
-	"webp",
-	"tiff",
-	"svg",
-}
-
-local function is_image_filetype(ft)
-	for _, value in ipairs(image_filetypes) do
-		if value == ft then
-			return true
-		end
-	end
-
-	return false
-end
-
-vim.api.nvim_create_autocmd("BufWinLeave", {
-	group = image_window_width_group,
-	callback = function(args)
-		local ft = vim.bo[args.buf].filetype
-		if not is_image_filetype(ft) then
-			return
-		end
-
-		vim.g.image_last_window_width = vim.api.nvim_win_get_width(0)
-	end,
-})
-
-vim.api.nvim_create_autocmd("BufWinEnter", {
-	group = image_window_width_group,
-	callback = function(args)
-		local ft = vim.bo[args.buf].filetype
-		local width = vim.g.image_last_window_width
-		if not is_image_filetype(ft) or not width then
-			return
-		end
-
-		pcall(vim.api.nvim_win_set_width, 0, width)
 	end,
 })
