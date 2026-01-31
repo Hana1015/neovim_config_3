@@ -22,3 +22,50 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "DirChanged" }, {
 		end
 	end,
 })
+
+local image_window_width_group = vim.api.nvim_create_augroup("UserImageWindowWidth", { clear = true })
+local image_filetypes = {
+	"png",
+	"jpg",
+	"jpeg",
+	"gif",
+	"bmp",
+	"webp",
+	"tiff",
+	"svg",
+}
+
+local function is_image_filetype(ft)
+	for _, value in ipairs(image_filetypes) do
+		if value == ft then
+			return true
+		end
+	end
+
+	return false
+end
+
+vim.api.nvim_create_autocmd("BufWinLeave", {
+	group = image_window_width_group,
+	callback = function(args)
+		local ft = vim.bo[args.buf].filetype
+		if not is_image_filetype(ft) then
+			return
+		end
+
+		vim.g.image_last_window_width = vim.api.nvim_win_get_width(0)
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	group = image_window_width_group,
+	callback = function(args)
+		local ft = vim.bo[args.buf].filetype
+		local width = vim.g.image_last_window_width
+		if not is_image_filetype(ft) or not width then
+			return
+		end
+
+		pcall(vim.api.nvim_win_set_width, 0, width)
+	end,
+})
