@@ -44,3 +44,6 @@ end
 
 vim.keymap.set("x", "p", visual_paste_keep_eol, { noremap = true, silent = true, expr = true, desc = "Paste without overwriting yank" })
 vim.keymap.set("x", "P", visual_paste_keep_eol, { noremap = true, silent = true, expr = true, desc = "Paste without overwriting yank" })
+
+-- ノーマルモードのEnterで改行を挿入してノーマルモードに戻る
+vim.keymap.set("n", "<CR>", "o<Esc>", { noremap = true, silent = true, desc = "Insert new line below" })
