@@ -4,16 +4,21 @@ return {
   opts = function()
     local backend = "sixel"
 
+    -- kitty: KITTY_WINDOW_ID or TERM=xterm-kitty (SSH経由でも検出可能)
+    -- wezterm: WEZTERM_EXECUTABLE or TERM_PROGRAM
+    -- ghostty: TERM_PROGRAM or TERM=xterm-ghostty
     if vim.env.KITTY_WINDOW_ID
+      or vim.env.TERM == "xterm-kitty"
       or vim.env.WEZTERM_EXECUTABLE
       or vim.env.TERM_PROGRAM == "WezTerm"
-      or vim.env.TERM_PROGRAM == "Ghostty"
+      or vim.env.TERM_PROGRAM == "ghostty"
+      or vim.env.TERM == "xterm-ghostty"
     then
       backend = "kitty"
     end
 
     if vim.env.TERM_PROGRAM == "iTerm.app" then
-      backend = "sixel"
+      backend = "iterm"
     end
 
     return {
