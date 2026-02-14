@@ -6,4 +6,5 @@ vim.opt.guicursor = "a:ver25"
 vim.opt.virtualedit = "onemore"
 vim.opt.backspace = "indent,eol,start"
 vim.opt.mouse = "a"
+vim.opt.wrap = true
 -- # で始まる行で改行しても自動で # を継続しない　これは無理。
